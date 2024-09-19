@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +22,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::view(uri: '/users', view: 'users.showAll')->name(name: 'users.all');
 Route::view(uri: '/game', view: 'game.show')->name(name: 'game.show');
+Route::get('/chat', [ChatController::class, 'showChat'])->name('chat.show');
+Route::get('/chat/message', [ChatController::class, 'messageReceived'])->name('chat.message');
+// Route::get(uri: '/chat/{id}',  action: 'ChatController@showChat')->name('order.index');
