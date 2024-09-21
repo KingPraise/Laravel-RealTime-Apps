@@ -2,6 +2,9 @@
 
 @push('styles')
     <style type="text/css">
+        #users>li {
+            cursor: pointer;
+        }
     </style>
 @endpush
 
@@ -18,7 +21,7 @@
                                 <div class="row">
                                     <div class="col-12 border rounded-lg p-3">
                                         <ul id="messages" class="list-unstyled overflow-auto" style="height:45vh;">
-                                           
+
                                         </ul>
                                     </div>
                                 </div>
@@ -59,6 +62,8 @@
 
                     let element = document.createElement('li');
                     element.setAttribute('id', user.id);
+                    element.setAttribute('onclick', 'greetUser("' + user.id + '")');
+
                     element.innerText = user.name;
                     usersElement.appendChild(element);
                 });
@@ -66,6 +71,8 @@
             .joining((user) => {
                 let element = document.createElement('li');
                 element.setAttribute('id', user.id);
+                element.setAttribute('onclick', 'greetUser("' + user.id + '")');
+
                 element.innerText = user.name;
                 usersElement.appendChild(element);
             })
@@ -74,21 +81,34 @@
                 element.parentNode.removeChild(element);
             })
             .listen('MessageSent', (e) => {
-                let element = document.createElement('li'); 
+                let element = document.createElement('li');
                 element.innerText = e.user.name + ": " + e.message;
                 messageElement.appendChild(element);
             });
     </script>
     <script>
-         const messageElement = document.getElementById('message');
-         const sendElement = document.getElementById('send');
-         sendElement.addEventListener('click', (e) => {
+        const messageElement = document.getElementById('message');
+        const sendElement = document.getElementById('send');
+        sendElement.addEventListener('click', (e) => {
             e.preventDefault();
             window.axios.post('/chat/message', {
-                message : messageElement.value
+                message: messageElement.value
             });
             messageElement.value = '';
+        });
+    </script>
+    <script>
+        function greetUser() {
+            window.axios.post('/chat/greet' + id);
+        }
+    </script>
+    <script>
+        Echo.private('chat.greet. {{ auth()->user()->id }}')
+            .listen('GreetingSent', (e) => {
+                let element = document.createElement('li');
+                element.innerText = e.message;
+                element.classList.add('text-success');
+                messageElement.appendChild(element);
             });
-
     </script>
 @endpush

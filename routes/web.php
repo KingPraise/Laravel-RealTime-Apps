@@ -27,4 +27,4 @@ Route::view(uri: '/users', view: 'users.showAll')->name(name: 'users.all');
 Route::view(uri: '/game', view: 'game.show')->name(name: 'game.show');
 Route::get('/chat', [ChatController::class, 'showChat'])->name('chat.show');
 Route::get('/chat/message', [ChatController::class, 'messageReceived'])->name('chat.message');
-// Route::get(uri: '/chat/{id}',  action: 'ChatController@showChat')->name('order.index');
+Route::get('/chat/greet/{user}', action: [ChatController::class, 'greetReceived'])->name('chat.greet');
